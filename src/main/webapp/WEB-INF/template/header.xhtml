@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui" >
+
+    <body>
+        <ui:composition>
+
+            <h:form>    
+                <p:menubar>
+                    <p:menuitem value=""  icon="ui-icon-home"  
+                                outcome="/home.jsf" title="Inicio"/> 
+
+                    <p:menuitem value="Cartas Entidades-Personas" outcome="/cliente/clientes.jsf"
+                                icon="ui-icon-person"/>
+                    
+                    <p:submenu label="Administrar" icon="ui-icon-gear">
+                        <p:menuitem value="Usuarios" outcome="/admin/users.jsf"/>
+                    </p:submenu>
+
+                    <p:menuitem value="Salir" url="/elcortijo/j_spring_security_logout"
+                                icon="ui-icon-power" style="margin-left: 100px" />
+                </p:menubar>
+
+                <div style="display:inline-block;  position:absolute; top: 1em; right:1em;">  
+                    <h:outputText value=" | Conectado: #{userBean.loginUser.username}" 
+                                  style="color: #DDDDDD; font-weight: bold; font-size: small" 
+                                  title="Versión #{msg.versionAplicacion}"/>            
+                </div>
+
+            </h:form>
+
+        </ui:composition>
+    </body>
+</html>

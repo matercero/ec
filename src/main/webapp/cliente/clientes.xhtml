@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui" >
+
+    <ui:composition template="../WEB-INF/template/layout.xhtml">
+        <ui:define name="content">
+            <p:messages id="cli-messages" showDetail="true" showSummary="false" autoUpdate="true" closable="true"/>   
+            <h:form id="clienteForm" prependId="false">
+                <h2 style="text-align: center">Entidades-Personas</h2>
+                <p:dataTable var="v_cli" value="#{clienteBean.clientes}"
+                             paginator="true"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="15,20" rows="15"
+                             style="width:100%;"  paginatorPosition="bottom"
+                             selection="#{clienteBean.listaSelectedCliente}" rowKey="#{v_cli.id}" >
+
+                    <p:column selectionMode="multiple" style="width:16px;text-align:center" />
+
+                    <p:column headerText="Nombre" sortBy="#{v_cli.nombre}">
+                        <h:outputText value="#{v_cli.nombre}" />
+                    </p:column>                
+                    <p:column headerText="Apellidos" sortBy="#{v_cli.apellidos}">
+                        <h:outputText value="#{v_cli.apellidos}" />
+                    </p:column>
+                    <p:column headerText="Móvil" sortBy="#{v_cli.movil}">
+                        <h:outputText value="#{v_cli.movil}" />
+                    </p:column>
+                    <p:column headerText="Email">
+                        <h:outputText value="#{v_cli.email}" />
+                    </p:column>
+
+                    <p:column headerText="Acciones" style="width: 5%">
+                        <p:commandButton action="cliente?faces-redirect=true"
+                                         icon="ui-icon-pencil" title="Editar">
+                            <f:setPropertyActionListener value="#{v_cli}" 
+                                                         target="#{clienteBean.selectedCliente}" />
+                        </p:commandButton>
+
+                    </p:column>
+                </p:dataTable>
+
+                <h:panelGroup style="display: block; text-align: center; margin-top: 15px">
+                    <p:commandButton value="Nueva Entidad-Persona"  icon="ui-icon-plusthick"
+                                     actionListener="#{clienteBean.newCliente}"
+                                     action="cliente?faces-redirect=true"/>
+                </h:panelGroup>
+
+                <h:commandLink  id="pdf" 
+                                styleClass="ui-button ui-widget ui-state-default
+                                ui-corner-all ui-button-text-icon-left"
+                                style="color: black !important;"
+                                action="#{clienteBean.generarCartas}"
+                                title="Generar Cartas saluda">
+                    <span class="ui-button-icon-left ui-icon ui-c fa fa-fw fa-print"></span>
+                    <span class="ui-button-text ui-c">Generar Cartas</span>
+                </h:commandLink>
+
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>

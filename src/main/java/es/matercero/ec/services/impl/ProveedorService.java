@@ -1,0 +1,87 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package es.matercero.ec.services.impl;
+
+import es.matercero.ec.daos.IDao;
+import es.matercero.ec.hibernate.Categoria;
+import es.matercero.ec.hibernate.Proveedor;
+import es.matercero.ec.services.IProveedorService;
+import java.io.Serializable;
+import java.util.List;
+import org.hibernate.Criteria;
+import org.hibernate.Hibernate;
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+/**
+ *
+ * @author mangel.tercero
+ */
+@Service("proveedorService")
+@Transactional
+public class ProveedorService implements IProveedorService, Serializable {
+    
+    
+      /**
+     * * serialVersionUID
+     */
+    private static final long serialVersionUID = 1L;
+    @Autowired
+    private IDao<Proveedor> proveedorDao;
+
+    public ProveedorService() {
+    }
+    
+    @Override
+    public List<Proveedor> queryAllProveedores() {
+        DetachedCriteria dc = DetachedCriteria.forClass(Proveedor.class, "proveedor");
+        dc.addOrder(Order.asc("nombre"));
+        dc.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+        return getProveedorDao().find(dc);
+    }
+
+    @Override
+    public void createProveedor(Proveedor entity) {
+        getProveedorDao().save(entity);
+    }
+
+    @Override
+    public void updateProveedor(Proveedor entity) {
+        getProveedorDao().update(entity);
+    }
+
+    /**
+     * @return the proveedorDao
+     */
+    public IDao<Proveedor> getProveedorDao() {
+        return proveedorDao;
+    }
+
+    /**
+     * @param proveedorDao the proveedorDao to set
+     */
+    public void setProveedorDao(IDao<Proveedor> proveedorDao) {
+        this.proveedorDao = proveedorDao;
+    }
+    
+    
+    @Override
+    public Proveedor queryProveedorCategoriaById(Integer id) {
+        Proveedor prov = null;
+        DetachedCriteria dc = DetachedCriteria.forClass(Proveedor.class, "proveedor");
+        dc.add(Restrictions.eq("id", id));
+        List<Proveedor> result = this.getProveedorDao().find(dc);
+        if (!result.isEmpty()) {
+              prov = result.get(0);
+              Hibernate.initialize(prov.getCategoriaList());
+        }
+        return prov;
+    }
+}
